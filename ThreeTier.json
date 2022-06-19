@@ -1,1 +1,197 @@
-
+{
+    "AWSTemplateFormatVersion" : "2010-09-09",
+    "Description" : "Three Tier Architecture",
+    "Resources" : {
+        "DevVPC" : {
+            "Type" : "AWS::EC2::VPC",
+            "Properties" : {
+                "CidrBlock" : "10.1.0.0/16"
+            }
+        },
+        "RouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" : {
+                "VpcId" : "DevVPC"
+            }
+        },
+        "InternetGateway" : {
+            "Type" : "AWS::EC2::InternetGateway",
+            "Properties" : {
+                "DependsOn" : "DevVPC"
+            }
+        },
+        "InternetGatewayAttachement" : {
+            "Type" : "AWS::EC2::VPCGatewayAttachement",
+            "Properties" : {
+                "VpcId" : "DevVPC",
+                "InternetGatewayId" : "InternetGateway"
+            }
+        },
+        "PublicSubnet" : {
+            "Type" : "AWS::EC2::Subnet",
+            "Properties" : {
+                "VpcId" : "DevVPC",
+                "CidrBlock" : "10.1.1.0/24",
+                "AvailabilityZone" : "us-east-1a",
+                "MapPublicIpOnLaunch" : true
+            }
+        },
+        "PublicRouteTable" : {
+            "Type" : "AWS::EC2::RouteTable",
+            "Properties" :{
+                "VpcId" : "DevVPC"
+            }
+        },
+        "PublicRoute" : {
+            "Type" : "AWS::EC2::Route",
+            "Properties" : {
+                "RouteTableId" : "PublicRouteTable",
+                "DestinationCidrBlock" : "0.0.0.0/0",
+                "GatewayId" : "InternetGateway"
+            }
+        },
+        "PublicSubnetRoutetableAssociation" : {
+            "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties" : {
+                "RouteTableId" : "PublicRouteTable",
+                "SubnetId" : "PublicSubnet"
+            }
+        },
+        "PublicInstanceSecurityGroup" : {
+            "Type" : "AWS::EC2::SecurityGroup",
+            "Properties" : {
+                "GroupName" : "PublicEC2SG",
+                "GroupDescription" : "Open HTTP (Port 80) and SSH (Port 22)",
+                "VpcId" : "DevVPC",
+                "SecurityGroupIngress" : [
+                    {
+                    "IpProtocol" : "tcp",
+                    "FromPort" : 80,
+                    "ToPort" : 80,
+                    "CidrIp" : "0.0.0.0/0"
+                    },
+                    {
+                        "IpProtocol" : "tcp",
+                        "FromPort" : 22,
+                        "ToPort" : 22,
+                        "CidrIp" : "0.0.0.0/0"
+                    }
+                ]
+                }
+            },
+            "WebTierEC2" : {
+                "Type" : "AWS::EC2::Instance",
+                "Properties" : {
+                    "InstanceDescription" : "Web Tier EC2 Instance",
+                    "ImageId" : "ami-0cff7528ff583bf9a",
+                    "InstanceType" : "t2.micro",
+                    "KeyName" : "KeyPairNVirginia",
+                    "UserData" : {
+                        "Fn::Base64": "#!/bin/bash\nyum update -y\nyum install httpd -y\nsystemctl start httpd\nsystemctl enable httpd\namazon-linux-extras install epel -y\nyum install stress -y\n"
+                    }
+                }
+            },
+            "PrivateSubnet1" : {
+                "Type" : "AWS::EC2::Subnet",
+                "Properties" : {
+                    "VpcId" : "DevVPC",
+                    "CidrBlock" : "10.1.2.0/24",
+                    "AvailabilityZone" : "us-east-1a"
+                    "MapPublicIpOnLaunch" : false
+                }
+            },
+            "PrivateRouteTable1" : {
+                "Type" : "AWS::EC2::RouteTable",
+                "Properties" : {
+                    "VpcId" : "DevVPC"
+                }
+            },
+            "PrivateRoute1" : {
+                "Type" : "AWS::EC2::Route",
+                "Properties" : {
+                    "RouteTableId" : "PrivateRouteTable1",
+                    "DestinationCidrBlock" : "10.1.2.0/24"
+                }
+            },
+            "PrivateSubnet1RouteTableAssociation" : {
+                "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+                "Properties" : {
+                    "RouteTableId" : "PrivateRouteTable1",
+                    "SubnetId" : "PrivateSubnet1"
+                }
+            },
+            "PrivateInstance1SecurityGroup" : {
+                "Type" : "AWS::EC2::SecurityGroup",
+                "Properties" : {
+                    "GroupName" : "PrivateEC2SG",
+                    "GroupDescription" : "Open SSH (port 22) to Web Tier EC2 Instance",
+                    "VpcId" : "DevVPC",
+                    "SecurityGroupIngress" : {
+                        "IpProtocol" : "tcp",
+                        "FromPort" : 22,
+                        "ToPort" : 22,
+                        "CidrIp" : "10.1.1.0/24"
+                    }
+                }
+            },
+            "AppTierEC2" : {
+                "Type" : "AWS::EC2::Instance",
+                "Properties" : {
+                    "InstanceDescription" : "APP Tier EC2 Instance",
+                    "ImageId" : "ami-0cff7528ff583bf9a",
+                    "InstanceType" : "t2.micro",
+                    "KeyName" : "KeyPairNVirginia"
+                }
+            },
+            "PrivateSubnet2" : {
+                "Type" : "AWS::EC2::Subnet",
+                "Properties" : {
+                    "VpcId" : "DevVPC",
+                    "AvailabilityZone" : "us-east-1a",
+                    "CidrBlock" : "10.1.3.0/24",
+                    "MapPublicIpOnLaunch" : false
+                }
+            },
+            "PrivateRouteTable2" : {
+                "Type" : "AWS::EC2::RouteTable",
+                "Properties" : {
+                    "VpcId" : "DevVPC"
+                }
+            },
+            "PrivateRoute2" : {
+                "Type" : "AWS::EC2::Route",
+                "Properties" : {
+                    "RouteTableId" : "PrivateRouteTable2",
+                    "DestinationCidrBlock" : "10.1.3.0/24"
+                }
+            },
+            "PrivateSubnet2RouteTableAssociation" : {
+                "Type" : "AWS::EC2::SubnetRouteTableAssociation",
+                "Properties" : {
+                    "RouteTableId" : "PrivateRouteTable2",
+                    "SubnetId" : "PrivateSubnet2"
+                }
+            },
+            "RDSSecurityGroup" : {
+                "Type" : "AWS::EC2::SecurityGroup",
+                "Properties" : {
+                    "GroupName" : "PrivateRDSSG",
+                    "GroupDescription" : "Open MySQL (Port 3306) to APP Tier",
+                    "VpcId" : "DevVPC",
+                    "SecurityGroupIngress" : {
+                        "IpProtocol" : "tcp",
+                        "FromPort" : 3306,
+                        "ToPort" : 3306,
+                        "CidrIp" : "10.1.2.0/24"
+                    }
+                }
+            },
+            "MySQLRDSInstance" : {
+                "Type" : "AWS::RDS::DBInstance",
+                "Properties" : {
+                    
+                }
+            }
+        }
+    }
+}
