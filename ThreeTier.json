@@ -224,7 +224,7 @@
         "DatabaseInstanceClass" : {
             "Description" : "Select Instance Type",
             "Type" : "String",
-            "Default" : "db.t2.micro",
+            "Default" : "db.t2.micro"
         },
         "DBAdminUsername" : {
             "Description" : "Database Administration User Name",
@@ -235,7 +235,7 @@
             "Description" : "Database Administration User Password",
             "Type" : "String",
             "Default" : "admin123"
-        },
+        }
 
     }
 }
