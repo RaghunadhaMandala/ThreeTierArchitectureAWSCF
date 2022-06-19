@@ -96,7 +96,7 @@
                 "Properties" : {
                     "VpcId" : "DevVPC",
                     "CidrBlock" : "10.1.2.0/24",
-                    "AvailabilityZone" : "us-east-1a"
+                    "AvailabilityZone" : "us-east-1a",
                     "MapPublicIpOnLaunch" : false
                 }
             },
