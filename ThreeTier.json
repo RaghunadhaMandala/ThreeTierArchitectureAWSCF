@@ -188,10 +188,54 @@
             },
             "MySQLRDSInstance" : {
                 "Type" : "AWS::RDS::DBInstance",
+                "DeletionPolicy" : "Retain",
                 "Properties" : {
-                    
+                    "AllocatedStorage" : { "Ref" : "DatabaseStorageAllocation"},
+                    "DBInstanceClass" : { "Ref" : "DatabaseInstanceClass"},
+                    "Engine" : "MySQL",
+                    "EngineVersion" : "8.0.28",
+                    "MasterUsername" : { "Ref" : "DBAdminUsername"},
+                    "MasterUserPassword" : { "Ref" : "DBAdminPassword"},
+                    "VPCSecurityGroup" : "RDSSecurityGroup",
+                    "DBSubnetGroupName" : "PrivateSubnet2",
+                    "DeletionProtection" : true
+                }
+            },
+            "MyDomain" : {
+                "Type" : "AWS::Route53::HostedZone",
+                "Properties" : {
+                    "Name" : "www.rapahere.tk",
+                    "VPCs" : {
+                        "VPCId" : "DevVPC",
+                        "VPCRegion" : "us-east-1a"
+                    }
                 }
             }
-        }
+        },
+    "Parameters" : {
+        "DatabaseStorageAllocation" : {
+            "Default" : "15",
+            "Description" : "Enter the size of the database (GB)",
+            "Type" : "Number",
+            "MinValue" : "10",
+            "MaxValue" : "1024",
+            "ConstraintDescription" : "Value must be between 10 - 1024"
+        },
+        "DatabaseInstanceClass" : {
+            "Description" : "Select Instance Type",
+            "Type" : "String",
+            "Default" : "db.t2.micro",
+        },
+        "DBAdminUsername" : {
+            "Description" : "Database Administration User Name",
+            "Type" : "String",
+            "Default" : "admin"
+        },
+        "DBAdminPassword" : {
+            "Description" : "Database Administration User Password",
+            "Type" : "String",
+            "Default" : "admin123"
+        },
+
     }
 }
