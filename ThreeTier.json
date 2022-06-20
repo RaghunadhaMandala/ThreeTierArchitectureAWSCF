@@ -205,7 +205,7 @@
                 "Properties" : {
                     "AllocatedStorage" : { "Ref" : "DatabaseStorageAllocation"},
                     "DBInstanceClass" : { "Ref" : "DatabaseInstanceClass"},
-                    "AvailabilityZone" : ["us-east-1c", "us-east-1d"],
+                    "MultiAZ" : false,
                     "Engine" : "MySQL",
                     "EngineVersion" : "8.0.28",
                     "MasterUsername" : { "Ref" : "DBAdminUsername"},
