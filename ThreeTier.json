@@ -25,6 +25,15 @@
                 "InternetGatewayId" : {"Ref" : "InternetGateway"}
             }
         },
+        "NATDefaultRoute" : {
+            "DependsOn" : "InternetGatewayAttachement",
+            "Type" : "AWS::EC2::Route",
+            "Properties" : {
+                "RouteTableId" : {"Ref" : "RouteTable"},
+                "DestinationCidrBlock" : "0.0.0.0/0",
+                "GatewayId" : {"Ref" : "InternetGateway"}
+            }
+        },
         "PublicSubnet" : {
             "Type" : "AWS::EC2::Subnet",
             "Properties" : {
