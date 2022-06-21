@@ -245,7 +245,6 @@
 		},
         "MySQLRDSInstance" : {
                 "Type" : "AWS::RDS::DBInstance",
-                "DeletionPolicy" : "Retain",
                 "Properties" : {
                     "AllocatedStorage" : { "Ref" : "DatabaseStorageAllocation"},
                     "DBInstanceClass" : { "Ref" : "DatabaseInstanceClass"},
