@@ -54,7 +54,7 @@
 			"DependsOn" : "NATDefaultRoute",
             "Properties" : {
                 "RouteTableId" : {"Ref" : "PublicRouteTable"},
-                "DestinationCidrBlock" : "10.1.1.0/24",
+                "DestinationCidrBlock" : "0.0.0.0/0",
                 "GatewayId" : {"Ref" : "InternetGateway"}
             }
         },
@@ -119,7 +119,7 @@
 				"DependsOn" : "InternetGateway",
                 "Properties" : {
                     "RouteTableId" : {"Ref" : "PrivateRouteTable1"},
-                    "DestinationCidrBlock" : "0.0.0.0/0",
+                    "DestinationCidrBlock" : "10.1.1.0/24",
 					"GatewayId" : {"Ref" :"InternetGateway"}
                 }
         },
@@ -173,7 +173,7 @@
 				"DependsOn" : "InternetGateway",
                 "Properties" : {
                     "RouteTableId" : {"Ref" : "PrivateRouteTable2"},
-					"DestinationCidrBlock" : "10.1.3.0/24",
+					"DestinationCidrBlock" : "10.1.2.0/24",
 					"GatewayId" : {"Ref" : "InternetGateway"}
                 }
         },
@@ -204,7 +204,7 @@
 				"DependsOn" : "InternetGateway",
                 "Properties" : {
                     "RouteTableId" : {"Ref" : "PrivateRouteTable2"},
-					"DestinationCidrBlock" : "10.1.4.0/24",
+					"DestinationCidrBlock" : "10.1.2.0/24",
 					"GatewayId" : {"Ref" : "InternetGateway"}
                 }
         },
