@@ -238,7 +238,6 @@
                 "Properties" : {
                     "AllocatedStorage" : { "Ref" : "DatabaseStorageAllocation"},
                     "DBInstanceClass" : { "Ref" : "DatabaseInstanceClass"},
-                    "AvailabilityZone" : { "Fn::GetAZs" : "us-east-1" },
                     "Engine" : "MySQL",
                     "EngineVersion" : "8.0.28",
                     "MasterUsername" : { "Ref" : "DBAdminUsername"},
