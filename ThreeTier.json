@@ -224,8 +224,11 @@
 				"DBSubnetGroupDescription" : "RDS VPC Subnet Group",
 				"SubnetIds" : [
 				{ 
-                    "Ref" : [ "PrivateSubnet2", "PrivateSubnet3" ]
-				}
+                    "Ref" : "PrivateSubnet2"
+				},
+                {
+                    "Ref" : "PrivateSubnet3"
+                }
 				]
 			}
 		},
