@@ -164,7 +164,7 @@
 				"DependsOn" : "InternetGateway",
                 "Properties" : {
                     "RouteTableId" : {"Ref" : "PrivateRouteTable2"},
-					"DestinationCidrBlock" : "0.0.0.0/0",
+					"DestinationCidrBlock" : "10.1.3.0/24",
 					"GatewayId" : {"Ref" : "InternetGateway"}
                 }
         },
@@ -195,7 +195,7 @@
 				"DependsOn" : "InternetGateway",
                 "Properties" : {
                     "RouteTableId" : {"Ref" : "PrivateRouteTable2"},
-					"DestinationCidrBlock" : "0.0.0.0/0",
+					"DestinationCidrBlock" : "10.1.4.0/24",
 					"GatewayId" : {"Ref" : "InternetGateway"}
                 }
         },
