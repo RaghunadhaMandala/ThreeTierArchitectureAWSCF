@@ -8,7 +8,7 @@
                 "CidrBlock" : "10.1.0.0/16"
             }
         },
-        "RouteTable" : {
+        "MainRouteTable" : {
             "Type" : "AWS::EC2::RouteTable",
             "Properties" : {
                 "VpcId" : {"Ref" : "DevVPC"}
@@ -29,7 +29,7 @@
             "DependsOn" : "InternetGatewayAttachement",
             "Type" : "AWS::EC2::Route",
             "Properties" : {
-                "RouteTableId" : {"Ref" : "RouteTable"},
+                "RouteTableId" : {"Ref" : "MainRouteTable"},
                 "DestinationCidrBlock" : "0.0.0.0/0",
                 "GatewayId" : {"Ref" : "InternetGateway"}
             }
@@ -51,10 +51,10 @@
         },
         "PublicRoute" : {
             "Type" : "AWS::EC2::Route",
-			"DependsOn" : "InternetGateway",
+			"DependsOn" : "NATDefaultRoute",
             "Properties" : {
                 "RouteTableId" : {"Ref" : "PublicRouteTable"},
-                "DestinationCidrBlock" : "0.0.0.0/0",
+                "DestinationCidrBlock" : "10.1.1.0/24",
                 "GatewayId" : {"Ref" : "InternetGateway"}
             }
         },
